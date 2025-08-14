@@ -1,0 +1,54 @@
+# STT5900 - Análise de Dados Multivariados Aplicados à Engenharia de
+Transportes (2025)
+Prof. André Luiz Cunha, Prof. Cira Souza Pitombo
+
+- [<span class="toc-section-number">1</span> Ementa](#ementa)
+  - [<span class="toc-section-number">1.1</span> Objetivos](#objetivos)
+  - [<span class="toc-section-number">1.2</span>
+    Justificativa](#justificativa)
+  - [<span class="toc-section-number">1.3</span> Conteúdo](#conteúdo)
+
+------------------------------------------------------------------------
+
+# Ementa
+
+## Objetivos
+
+Fornecer um conjunto de técnicas estatísticas que permitem analisar
+problemas de engenharia de transportes com um número elevado de
+variáveis. Mostrar aplicações de técnicas diversas em diferentes
+trabalhos científicos da área. Estimular os alunos a tratar seus
+diferentes bancos de dados (estudos de caso) relativos à engenharia de
+transportes. Apresentar um pacote estatístico livre para aplicação de
+técnicas estudadas em sala para diversas bases de dados.
+
+## Justificativa
+
+O conhecimento e aplicação de técnicas estatísticas é essencial para
+qualquer trabalho de pesquisa. A disciplina fornecerá técnicas mais
+avançadas de análise de dados, apresentando modelos multivariados
+relacionados à Engenharia de Transportes. Contará com diversas
+aplicações, auxílio de pacote estatístico, provendo o aluno de
+pós-graduação de ferramentas para desenvolvimento de projeto.
+
+## Conteúdo
+
+1.  Introdução – apresentação das técnicas – conhecimento dos bancos de
+    dados e objetivos os alunos
+
+2.  Preparação para uma análise multivariada – conhecimento dos seus
+    dados
+
+3.  Análise em Componentes Principais
+
+4.  Regressão Linear Múltipla
+
+5.  Logit Multinomial
+
+6.  Análise de agrupamentos
+
+7.  Árvore de decisão e Floresta Aleatória
+
+8.  Redes Neurais Artificiais
+
+9.  Algoritmos Genéticos
