@@ -4,19 +4,14 @@ author:
   - name: "Prof. André Luiz Cunha"
   - name: "Prof. Cira Souza Pitombo"
 
-format: 
-  gfm:
-    toc: true
-    number-sections: true
-    tbl-cap-location: top
+format: gfm
+  # gfm:
+  #   toc: true
+  #   number-sections: true
+  #   tbl-cap-location: top
 ---
 
 ------------------------------------------------------------------------
-
-```{r, echo=FALSE, message=FALSE}
-library(ggplot2)
-library(dplyr)
-```
 
 # Ementa
 
