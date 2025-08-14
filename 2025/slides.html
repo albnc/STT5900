@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programação do Curso - Análise de Dados Multivariados</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -95,7 +96,7 @@
         .slide-title {
             color: #2c4a76;
             font-size: 32px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             padding-bottom: 10px;
             border-bottom: 3px solid #ffd166;
             text-align: center;
@@ -108,6 +109,253 @@
             padding: 10px;
         }
         
+        /* Slide de Objetivos */
+        .objective-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+        
+        .objective-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #4a6fa5;
+            width: 100%;
+            max-width: 800px;
+            transition: all 0.3s;
+        }
+        
+        .objective-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .objective-card h3 {
+            color: #2c4a76;
+            margin-bottom: 15px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .techniques-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .technique-item {
+            background: #f8fbff;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 3px solid #ffd166;
+            transition: all 0.3s;
+        }
+        
+        .technique-item:hover {
+            background: #edf5ff;
+            transform: translateX(5px);
+        }
+        
+        .tech-icon {
+            width: 40px;
+            height: 40px;
+            background: #e6f0ff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4a6fa5;
+            font-size: 18px;
+        }
+        
+        /* Slide de Aulas */
+        .class-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .class-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border-top: 5px solid #4a6fa5;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .class-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #4a6fa5, #ffd166);
+        }
+        
+        .class-card h3 {
+            color: #2c4a76;
+            margin-bottom: 15px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .class-card ul {
+            padding-left: 20px;
+            margin-top: 15px;
+        }
+        
+        .class-card li {
+            margin-bottom: 12px;
+            padding-left: 10px;
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        .class-card li::before {
+            content: "•";
+            color: #ffd166;
+            font-weight: bold;
+            position: absolute;
+            left: -15px;
+            font-size: 20px;
+        }
+        
+        .highlighted {
+            background: #fff9e6;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        /* Slide de Apoio */
+        .support-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .support-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid #e6f0ff;
+        }
+        
+        .support-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+            border-color: #ffd166;
+        }
+        
+        .support-icon {
+            width: 70px;
+            height: 70px;
+            background: #e6f0ff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            color: #4a6fa5;
+        }
+        
+        .support-card h3 {
+            color: #2c4a76;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        /* Slide de Atividades */
+        .activities-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .activity-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .activity-card::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #4a6fa5, #ffd166);
+        }
+        
+        .activity-percent {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .percent-10 {
+            background: linear-gradient(135deg, #4a6fa5, #2c4a76);
+        }
+        
+        .percent-30 {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        
+        .percent-60 {
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+        }
+        
+        .activity-card h3 {
+            color: #2c4a76;
+            margin-bottom: 15px;
+            font-size: 22px;
+            padding-right: 70px;
+        }
+        
+        /* Estilos existentes para outros slides */
         .important-dates {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -309,7 +557,11 @@
                 gap: 10px;
             }
             
-            .important-dates {
+            .objective-card, .class-card, .support-card, .activity-card {
+                padding: 20px;
+            }
+            
+            .techniques-grid, .important-dates {
                 grid-template-columns: 1fr;
             }
             
@@ -345,7 +597,177 @@
         
         <div class="slides-container">
             <div class="slides">
-                <!-- Slide 1: Programação do Curso -->
+                <!-- Slide 1: Objetivo -->
+                <div class="slide">
+                    <h2 class="slide-title">Objetivo do Curso</h2>
+                    <div class="slide-content">
+                        <div class="objective-container">
+                            <div class="objective-card">
+                                <h3><i class="fas fa-bullseye"></i> Objetivo Principal</h3>
+                                <p>Fornecer um conjunto de técnicas estatísticas que permitem analisar problemas com um número elevado de variáveis, capacitando os alunos a lidar com desafios complexos de engenharia de transportes.</p>
+                            </div>
+                            
+                            <div class="objective-card">
+                                <h3><i class="fas fa-chart-line"></i> Técnicas Abordadas</h3>
+                                <div class="techniques-grid">
+                                    <div class="technique-item">
+                                        <div class="tech-icon">
+                                            <i class="fas fa-project-diagram"></i>
+                                        </div>
+                                        <div>Análise em Componentes Principais</div>
+                                    </div>
+                                    <div class="technique-item">
+                                        <div class="tech-icon">
+                                            <i class="fas fa-calculator"></i>
+                                        </div>
+                                        <div>Regressão Logística</div>
+                                    </div>
+                                    <div class="technique-item">
+                                        <div class="tech-icon">
+                                            <i class="fas fa-tree"></i>
+                                        </div>
+                                        <div>Árvore de Decisão</div>
+                                    </div>
+                                    <div class="technique-item">
+                                        <div class="tech-icon">
+                                            <i class="fas fa-object-group"></i>
+                                        </div>
+                                        <div>Análise de Cluster</div>
+                                    </div>
+                                    <div class="technique-item">
+                                        <div class="tech-icon">
+                                            <i class="fas fa-brain"></i>
+                                        </div>
+                                        <div>Redes Neurais Artificiais</div>
+                                    </div>
+                                    <div class="technique-item">
+                                        <div class="tech-icon">
+                                            <i class="fas fa-dna"></i>
+                                        </div>
+                                        <div>Algoritmos Genéticos</div>
+                                    </div>
+                                    <div class="technique-item">
+                                        <div class="tech-icon">
+                                            <i class="fas fa-cogs"></i>
+                                        </div>
+                                        <div>Inferência Estatística</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 2: Aulas -->
+                <div class="slide">
+                    <h2 class="slide-title">Organização das Aulas</h2>
+                    <div class="slide-content">
+                        <div class="class-info">
+                            <div class="class-card">
+                                <h3><i class="fas fa-calendar-alt"></i> Horário e Local</h3>
+                                <ul>
+                                    <li>Aulas às <span class="highlighted">quintas-feiras</span></li>
+                                    <li>Horário: <span class="highlighted">14h às 18h</span></li>
+                                    <li>Locais: <span class="highlighted">LEI ou Anfiteatro</span></li>
+                                    <li>Duração: 4 horas semanais</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="class-card">
+                                <h3><i class="fas fa-database"></i> Metodologia</h3>
+                                <ul>
+                                    <li>Disciplina <span class="highlighted">vinculada ao banco de dados do aluno</span></li>
+                                    <li>Aprendizado baseado em projetos reais</li>
+                                    <li>Abordagem prática com aplicação imediata</li>
+                                    <li>Desenvolvimento de artigo científico</li>
+                                    <li>Integração entre teoria e prática</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 3: Apoio -->
+                <div class="slide">
+                    <h2 class="slide-title">Sistemas de Apoio</h2>
+                    <div class="slide-content">
+                        <div class="support-container">
+                            <div class="support-card">
+                                <div class="support-icon">
+                                    <i class="fab fa-google"></i>
+                                </div>
+                                <h3>Plataforma</h3>
+                                <p>Google Classroom para todo o material didático, atividades e comunicação.</p>
+                            </div>
+                            
+                            <div class="support-card">
+                                <div class="support-icon">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <h3>Material em Vídeo</h3>
+                                <p>Aulas gravadas e tutoriais em R disponíveis para consulta.</p>
+                            </div>
+                            
+                            <div class="support-card">
+                                <div class="support-icon">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <h3>Monitoria</h3>
+                                <p>Monitores (orientados dos docentes) para suporte das técnicas e programação.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 4: Atividades -->
+                <div class="slide">
+                    <h2 class="slide-title">Atividades e Avaliação</h2>
+                    <div class="slide-content">
+                        <div class="activities-container">
+                            <div class="activity-card">
+                                <div class="activity-percent percent-10">
+                                    10%
+                                </div>
+                                <h3>Atividades Pré-aula</h3>
+                                <p>Exercícios preparatórios para as aulas, realizados através do Google Forms.</p>
+                                <ul style="margin-top: 15px;">
+                                    <li>Questionários teóricos</li>
+                                    <li>Conceituar as técnicas</li>
+                                    <li>Leituras dirigidas</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="activity-card">
+                                <div class="activity-percent percent-30">
+                                    30%
+                                </div>
+                                <h3>Atividade em R</h3>
+                                <p>Aplicação prática de uma técnica estatística em linguagem R.</p>
+                                <ul style="margin-top: 15px;">
+                                    <li>Implementação de técnica</li>
+                                    <li>Análise de resultados</li>
+                                    <li>Relatório técnico</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="activity-card">
+                                <div class="activity-percent percent-60">
+                                    60%
+                                </div>
+                                <h3>Artigo Científico</h3>
+                                <p>Desenvolvimento de artigo científico aplicando técnicas do curso.</p>
+                                <ul style="margin-top: 15px;">
+                                    <li>Baseado no próprio banco de dados</li>
+                                    <li>Aplicação de 2+ técnicas</li>
+                                    <li>Análise comparativa</li>
+                                    <li>Apresentação final</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 5: Programação do Curso -->
                 <div class="slide">
                     <h2 class="slide-title">Programação do Curso</h2>
                     <div class="slide-content">
@@ -458,7 +880,7 @@
                     </div>
                 </div>
                 
-                <!-- Slide 2: Datas Importantes -->
+                <!-- Slide 6: Datas Importantes -->
                 <div class="slide">
                     <h2 class="slide-title">Datas Importantes</h2>
                     <div class="slide-content">
@@ -494,22 +916,12 @@
                             </div>
                             
                             <div class="date-card">
-                                <h3>Apresentação do Artigo</h3>
+                                <h3>Apresentação e Entrega do Artigo</h3>
                                 <div class="date">11 de Dezembro</div>
-                                <p>Data principal para apresentação e defesa dos artigos finais desenvolvidos.</p>
+                                <p>Data principal para apresentação e entrega do artigo desenvolvido.</p>
                             </div>
                             
-                            <div class="date-card">
-                                <h3>Entrega Final do Artigo</h3>
-                                <div class="date">11 de Dezembro</div>
-                                <p>Data limite para entrega da versão final do artigo completo.</p>
-                            </div>
                             
-                            <div class="date-card">
-                                <h3>Encerramento do Curso</h3>
-                                <div class="date">18 de Dezembro</div>
-                                <p>Último dia do semestre letivo e encerramento das atividades.</p>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -591,7 +1003,7 @@
             });
             
             // Auto-advance every 15 seconds
-            setInterval(nextSlide, 15000);
+            //setInterval(nextSlide, 15000);
         });
     </script>
 </body>
