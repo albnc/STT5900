@@ -8,5 +8,5 @@ Dois exemplos:
 
 O mesmo problema resolvido de duas formas — com `nnet` direto e com `tidymodels`.
 
-Scripts completos: [`RNA-simples.R`](RNA-simples.md) · [`RNA-tidymodels.R`](RNA-tidymodels.md)
+Scripts completos: [`RNA-simples`](RNA-simples.md) · [`RNA-tidymodels`](RNA-tidymodels.md)
 

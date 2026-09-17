@@ -5,7 +5,7 @@
 Versão mínima: só o pacote `nnet`, que já vem instalado com o R.
 Dois exemplos — prever um número (`mtcars`) e prever uma categoria (`iris`).
 
-Script: [`RNA-simples.R`](RNA-simples.R) · Mesmos exemplos com tidymodels: [`RNA-tidymodels.md`](RNA-tidymodels.md)
+Script: [`RNA-simples`](RNA-simples.md) · Mesmos exemplos com tidymodels: [`RNA-tidymodels`](RNA-tidymodels.md)
 
 ---
 

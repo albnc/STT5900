@@ -2,9 +2,9 @@
 
 **STT5900 · Engenharia de Transportes · EESC-USP · 2026**
 
-Os mesmos dois exemplos de [`RNA-simples.md`](RNA-simples.md) — `mtcars` e `iris` — agora no fluxo padrão do `tidymodels`.
+Os mesmos dois exemplos de [`RNA-simples`](RNA-simples.md) — `mtcars` e `iris` — agora no fluxo padrão do `tidymodels`.
 
-Script: [`RNA-tidymodels.R`](RNA-tidymodels.R)
+Script: [`RNA-tidymodels`](RNA-tidymodels.md)
 
 ```r
 install.packages("tidymodels")   # 80+ pacotes: instale ANTES da aula
