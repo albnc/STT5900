@@ -7,6 +7,7 @@ Dois exemplos — prever um número (`mtcars`) e prever uma categoria (`iris`).
 
 Script: [`RNA-simples`](RNA-simples.md) · Mesmos exemplos com tidymodels: [`RNA-tidymodels`](RNA-tidymodels.md)
 
+
 ---
 
 ## Definição
