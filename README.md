@@ -1,4 +1,4 @@
-# STT5900 - Análise de Dados Multivariados Aplicados à Engenharia de Transportes (2025)
+# STT5900 - Análise de Dados Multivariados Aplicados à Engenharia de Transportes
 Prof. André Luiz Cunha, Profa. Cira Souza Pitombo
 
 ------------------------------------------------------------------------

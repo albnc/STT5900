@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Dois exemplos minimos de redes neurais em R: regressao com mtcars e classificacao com iris, em nnet e tidymodels. STT5900 - EESC/USP.">
+<title>Redes Neurais em R</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --bg:#f5f7f8;
+  --surface:#ffffff;
+  --code-bg:#f0f3f5;
+  --ink:#141a1f;
+  --muted:#5c6a76;
+  --line:#dbe2e7;
+  --accent:#1f6f8b;
+  --accent-soft:#e3eef2;
+  --warm:#b3541e;
+  --ok:#2f7a4f;
+
+  --hl-key:#1f6f8b;
+  --hl-str:#2f7a4f;
+  --hl-num:#b3541e;
+  --hl-com:#7d8a95;
+  --hl-fun:#5b3fa8;
+
+  --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --serif:"IBM Plex Serif",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161a;
+    --surface:#171d23;
+    --code-bg:#1b2229;
+    --ink:#e4eaf0;
+    --muted:#94a2ad;
+    --line:#2a333c;
+    --accent:#63b8d2;
+    --accent-soft:#1c2b33;
+    --warm:#dd8a51;
+    --ok:#6cc08c;
+
+    --hl-key:#63b8d2;
+    --hl-str:#6cc08c;
+    --hl-num:#dd8a51;
+    --hl-com:#78868f;
+    --hl-fun:#b199ea;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161a;
+  --surface:#171d23;
+  --code-bg:#1b2229;
+  --ink:#e4eaf0;
+  --muted:#94a2ad;
+  --line:#2a333c;
+  --accent:#63b8d2;
+  --accent-soft:#1c2b33;
+  --warm:#dd8a51;
+  --ok:#6cc08c;
+
+  --hl-key:#63b8d2;
+  --hl-str:#6cc08c;
+  --hl-num:#dd8a51;
+  --hl-com:#78868f;
+  --hl-fun:#b199ea;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:880px;margin:0 auto;padding-inline:20px;padding-block:0 64px}
+
+/* ---------- cabeçalho ---------- */
+header.top{border-bottom:1px solid var(--line);background:var(--surface)}
+.top-inner{max-width:880px;margin:0 auto;padding-inline:20px;padding-block:32px 26px}
+.eyebrow{
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;margin:0 0 10px
+}
+h1{
+  font-family:var(--serif);font-weight:600;font-size:clamp(28px,5vw,40px);
+  line-height:1.15;margin:0 0 10px;text-wrap:balance
+}
+.lede{margin:0;color:var(--muted);max-width:62ch}
+.meta{
+  margin-top:18px;display:flex;flex-wrap:wrap;gap:8px 18px;
+  font-size:13px;color:var(--muted)
+}
+.meta a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--line)}
+.meta a:hover{border-color:var(--accent)}
+
+/* ---------- definição ---------- */
+.def{
+  background:var(--surface);border:1px solid var(--line);border-radius:4px;
+  padding:22px 24px;margin-block:32px
+}
+.def h2{font-family:var(--serif);font-size:19px;margin:0 0 14px;font-weight:600}
+.formula{
+  font-family:var(--mono);font-size:14.5px;line-height:2;
+  background:var(--code-bg);border-radius:3px;padding:14px 16px;
+  overflow-x:auto;white-space:pre;margin:0 0 16px
+}
+.formula .cmt{color:var(--hl-com)}
+.rules{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.rules li{display:flex;gap:12px;align-items:baseline;font-size:15px}
+.rules b{
+  font-family:var(--mono);font-size:12px;font-weight:500;color:var(--accent);
+  background:var(--accent-soft);border-radius:2px;padding:2px 7px;flex:none
+}
+
+/* ---------- abas ---------- */
+.tabs{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+  background:var(--bg);border-bottom:1px solid var(--line);
+  margin-block:40px 0;
+}
+.tabs-inner{display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding-block:10px}
+.tab{
+  font-family:var(--sans);font-size:14px;font-weight:500;
+  background:none;border:1px solid transparent;border-radius:3px;
+  color:var(--muted);padding:7px 13px;cursor:pointer
+}
+.tab[aria-selected="true"]{background:var(--surface);border-color:var(--line);color:var(--ink)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tab .tag{font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:6px}
+.spacer{flex:1}
+.copy-all{
+  font-family:var(--sans);font-size:13px;font-weight:500;
+  background:var(--accent);color:#fff;border:none;border-radius:3px;
+  padding:8px 14px;cursor:pointer
+}
+.copy-all:hover{filter:brightness(1.08)}
+.copy-all:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+/* ---------- seções ---------- */
+.part{margin-top:44px}
+.part-head{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
+.part-head h2{font-family:var(--serif);font-size:24px;margin:0;font-weight:600}
+.part-head .kind{
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--warm);border:1px solid currentColor;border-radius:2px;padding:2px 7px
+}
+.part-sub{margin:0 0 4px;color:var(--muted);font-size:15px}
+
+.step{
+  border-top:1px solid var(--line);
+  padding-block:24px 4px;
+  display:grid;grid-template-columns:32px 1fr;gap:0 14px;align-items:baseline
+}
+.step .n{
+  font-family:var(--mono);font-size:13px;color:var(--muted);
+  font-variant-numeric:tabular-nums;padding-top:2px
+}
+.step .body{min-width:0}
+.step h3{
+  font-family:var(--mono);font-size:15px;font-weight:500;margin:0 0 4px;
+  color:var(--ink);word-break:break-word
+}
+.step p{margin:0 0 12px;color:var(--muted);font-size:14.5px;max-width:64ch}
+
+/* ---------- código ---------- */
+.block{position:relative;margin-bottom:8px}
+pre{
+  margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:4px;
+  padding:16px 52px 16px 16px;overflow-x:auto
+}
+code{font-family:var(--mono);font-size:13.5px;line-height:1.75;color:var(--ink)}
+pre code{display:block;white-space:pre}
+.copy{
+  position:absolute;top:8px;right:8px;
+  font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:.04em;
+  background:var(--surface);color:var(--muted);
+  border:1px solid var(--line);border-radius:3px;padding:4px 9px;cursor:pointer;
+  opacity:.75;transition:opacity .15s
+}
+.block:hover .copy,.copy:focus-visible{opacity:1}
+.copy[data-done="1"]{color:var(--ok);border-color:var(--ok)}
+.copy:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+.out{margin:10px 0 0}
+.out summary{
+  cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;list-style:none;padding:4px 0
+}
+.out summary::-webkit-details-marker{display:none}
+.out summary::before{content:"▸ ";color:var(--accent)}
+.out[open] summary::before{content:"▾ "}
+.out pre{background:transparent;border-style:dashed;padding-right:16px}
+.out code{color:var(--muted);font-size:13px}
+
+/* ---------- tabelas ---------- */
+.tablewrap{overflow-x:auto;margin-block:16px 8px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:460px}
+th,td{text-align:left;padding:9px 14px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
+th{
+  font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-weight:500
+}
+td code,th code{font-family:var(--mono);font-size:13px}
+td:first-child{white-space:nowrap}
+
+/* ---------- nota ---------- */
+.note{
+  border-left:3px solid var(--warm);background:var(--surface);
+  padding:14px 18px;margin-block:22px;font-size:14.5px;color:var(--muted)
+}
+.note b{color:var(--ink);font-weight:500}
+
+footer{
+  border-top:1px solid var(--line);margin-top:56px;padding-top:24px;
+  font-size:13.5px;color:var(--muted)
+}
+footer a{color:var(--accent);text-decoration:none}
+
+/* ---------- destaque de sintaxe ---------- */
+.hljs-keyword,.hljs-literal{color:var(--hl-key)}
+.hljs-string{color:var(--hl-str)}
+.hljs-number{color:var(--hl-num)}
+.hljs-comment{color:var(--hl-com);font-style:italic}
+.hljs-built_in,.hljs-title,.hljs-title.function_{color:var(--hl-fun)}
+.hljs-operator,.hljs-punctuation{color:var(--ink)}
+.hljs-attr,.hljs-params{color:var(--ink)}
+
+@media (max-width:520px){
+  .step{grid-template-columns:1fr;gap:0}
+  .step .n{display:inline;margin-right:8px}
+  pre{padding-right:16px}
+  .copy{position:static;opacity:1;margin-bottom:6px;display:inline-block}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <p class="eyebrow">STT5900 · Transportes · EESC-USP</p>
+    <h1>Redes Neurais em R</h1>
+    <p class="lede">Dois exemplos mínimos: prever um número (<code>mtcars</code>) e prever uma categoria (<code>iris</code>). O mesmo problema resolvido de duas formas — com <code>nnet</code> direto e com <code>tidymodels</code>.</p>
+    <div class="meta">
+      <span>Aula prática 2026</span>
+      <span>Prof. André Luiz Cunha</span>
+      <a href="https://github.com/albnc" id="repo-link">Código no GitHub</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="def">
+    <h2>O que é uma rede neural</h2>
+    <div class="formula">z = b + w<sub>1</sub>x<sub>1</sub> + w<sub>2</sub>x<sub>2</sub> + ... + w<sub>p</sub>x<sub>p</sub>   <span class="cmt"># combinação linear</span>
+a = f(z)                          <span class="cmt"># ativação, não linear</span></div>
+    <p style="margin:0 0 16px;color:var(--muted);font-size:15px">Isso é um neurônio. A rede empilha neurônios em camadas e ajusta os pesos <code>w</code> para minimizar o erro. Sem a ativação não linear <code>f</code>, empilhar camadas dá apenas outra regressão linear.</p>
+    <ul class="rules">
+      <li><b>1</b><span>Escalonar as entradas. Sem isso a ativação satura e a rede não aprende.</span></li>
+      <li><b>2</b><span>Separar treino e teste. Senão você mede a memória, não o modelo.</span></li>
+      <li><b>3</b><span>Comparar com um modelo simples. Sem baseline, um RMSE não significa nada.</span></li>
+    </ul>
+  </section>
+
+  <div class="tabs">
+    <div class="tabs-inner" role="tablist" aria-label="Implementação">
+      <button class="tab" role="tab" id="tab-nnet" aria-controls="panel-nnet" aria-selected="true">nnet<span class="tag">base R</span></button>
+      <button class="tab" role="tab" id="tab-tidy" aria-controls="panel-tidy" aria-selected="false">tidymodels<span class="tag">workflow</span></button>
+      <span class="spacer"></span>
+      <button class="copy-all" id="copy-all">Copiar script inteiro</button>
+    </div>
+  </div>
+
+  <!-- ====================== NNET ====================== -->
+  <div id="panel-nnet" role="tabpanel" aria-labelledby="tab-nnet">
+
+    <div class="note">
+      <b>Nada para instalar.</b> O pacote <code>nnet</code> já vem com o R. As saídas abaixo foram geradas com <code>set.seed(2026)</code>.
+    </div>
+
+    <div class="block">
+      <button class="copy" type="button">copiar</button>
+      <pre><code class="language-r">library(nnet)
+set.seed(2026)</code></pre>
+    </div>
+
+    <section class="part">
+      <div class="part-head">
+        <h2>mtcars</h2><span class="kind">regressão</span>
+      </div>
+      <p class="part-sub">Prever <code>qsec</code> — tempo, em segundos, para percorrer 1/4 de milha.</p>
+
+      <div class="step">
+        <span class="n">1</span>
+        <div class="body">
+          <h3>sample()</h3>
+          <p>Sorteia 75% das linhas para treino; o resto é teste.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">dados  &lt;- mtcars
+n      &lt;- nrow(dados)
+i      &lt;- sample(n, size = round(0.75 * n))
+treino &lt;- dados[i, ]
+teste  &lt;- dados[-i, ]
+
+c(treino = nrow(treino), teste = nrow(teste))</code></pre>
+          </div>
+          <details class="out"><summary>saída</summary><pre><code>treino  teste
+    24      8</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">2</span>
+        <div class="body">
+          <h3>scale()</h3>
+          <p>Padroniza com a média e o desvio <b>do treino</b>. Escalonar o banco inteiro antes de separar leva informação do teste para dentro do treino.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">media  &lt;- apply(treino, 2, mean)
+desvio &lt;- apply(treino, 2, sd)
+
+treino_esc &lt;- as.data.frame(scale(treino, center = media, scale = desvio))
+teste_esc  &lt;- as.data.frame(scale(teste,  center = media, scale = desvio))</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">3</span>
+        <div class="body">
+          <h3>nnet()</h3>
+          <p>Treina a rede. <code>size</code> = neurônios ocultos, <code>decay</code> = penalização dos pesos, <code>linout = TRUE</code> = saída linear (obrigatório em regressão).</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">rede &lt;- nnet(qsec ~ mpg + cyl + disp + hp + wt,
+             data   = treino_esc,
+             size   = 3,
+             decay  = 0.01,
+             linout = TRUE,
+             maxit  = 500,
+             trace  = FALSE)
+
+summary(rede)$value      # erro final no treino</code></pre>
+          </div>
+          <details class="out"><summary>saída</summary><pre><code>[1] 2.583914</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">4</span>
+        <div class="body">
+          <h3>predict()</h3>
+          <p>Prevê no teste e desfaz a padronização para voltar a segundos.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">pred_esc &lt;- predict(rede, teste_esc)
+pred     &lt;- pred_esc * desvio["qsec"] + media["qsec"]
+
+resultado &lt;- data.frame(
+  observado = teste$qsec,
+  previsto  = round(as.vector(pred), 2),
+  erro      = round(teste$qsec - as.vector(pred), 2)
+)
+resultado</code></pre>
+          </div>
+          <details class="out" open><summary>saída</summary><pre><code>  observado previsto  erro
+1     18.61    18.10  0.51
+2     15.84    15.63  0.21
+3     22.90    19.22  3.68
+4     19.47    18.62  0.85
+5     19.90    18.72  1.18
+6     15.41    16.40 -0.99
+7     15.50    13.83  1.67
+8     14.60    15.67 -1.07</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">5</span>
+        <div class="body">
+          <h3>rmse() e mae()</h3>
+          <p>Mede o erro. RMSE pune erros grandes; MAE é o erro absoluto médio. Os dois em segundos.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">rmse &lt;- function(obs, prev) sqrt(mean((obs - prev)^2))
+mae  &lt;- function(obs, prev) mean(abs(obs - prev))
+
+c(RMSE = rmse(resultado$observado, resultado$previsto),
+  MAE  = mae(resultado$observado, resultado$previsto))</code></pre>
+          </div>
+          <details class="out"><summary>saída</summary><pre><code>    RMSE      MAE
+1.615371 1.270000</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">6</span>
+        <div class="body">
+          <h3>lm()</h3>
+          <p>O baseline. Compara a rede com a regressão linear e com o chute da média.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">linear  &lt;- lm(qsec ~ mpg + cyl + disp + hp + wt, data = treino)
+pred_lm &lt;- predict(linear, teste)
+
+round(c(rede   = rmse(teste$qsec, resultado$previsto),
+        linear = rmse(teste$qsec, pred_lm),
+        media  = rmse(teste$qsec, mean(treino$qsec))), 3)</code></pre>
+          </div>
+          <details class="out" open><summary>saída</summary><pre><code>  rede linear  media
+ 1.615  1.598  2.716</code></pre></details>
+          <p style="margin-top:10px">A linear empatou. Com 24 observações de treino, a rede não tem dados para justificar sua complexidade — e concluir isso é um resultado legítimo.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">7</span>
+        <div class="body">
+          <h3>plot()</h3>
+          <p>Observado × previsto. A linha tracejada é a previsão perfeita.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">plot(resultado$observado, resultado$previsto,
+     xlab = "qsec observado (s)", ylab = "qsec previsto (s)",
+     main = "Rede neural - mtcars", pch = 19, col = "steelblue")
+abline(0, 1, lty = 2)</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="part">
+      <div class="part-head">
+        <h2>iris</h2><span class="kind">classificação</span>
+      </div>
+      <p class="part-sub">Classificar a espécie a partir de 4 medidas de pétala e sépala.</p>
+
+      <div class="step">
+        <span class="n">1</span>
+        <div class="body">
+          <h3>split por classe</h3>
+          <p>Sorteia 75% <b>dentro de cada espécie</b>, para manter a proporção das classes.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">dados2  &lt;- iris
+i2      &lt;- unlist(lapply(split(seq_len(nrow(dados2)), dados2$Species),
+                         function(idx) sample(idx, round(0.75 * length(idx)))))
+treino2 &lt;- dados2[i2, ]
+teste2  &lt;- dados2[-i2, ]
+
+table(treino2$Species)</code></pre>
+          </div>
+          <details class="out"><summary>saída</summary><pre><code>    setosa versicolor  virginica
+        38         38         38</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">2</span>
+        <div class="body">
+          <h3>scale()</h3>
+          <p>Padroniza só os preditores. O alvo é fator e não entra.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">preditores &lt;- c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+
+media2  &lt;- apply(treino2[preditores], 2, mean)
+desvio2 &lt;- apply(treino2[preditores], 2, sd)
+
+treino2[preditores] &lt;- scale(treino2[preditores], center = media2, scale = desvio2)
+teste2[preditores]  &lt;- scale(teste2[preditores],  center = media2, scale = desvio2)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">3</span>
+        <div class="body">
+          <h3>nnet()</h3>
+          <p>Sem <code>linout</code>: em classificação a saída é probabilidade, uma por classe.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">rede2 &lt;- nnet(Species ~ .,
+              data  = treino2,
+              size  = 5,
+              decay = 0.01,
+              maxit = 500,
+              trace = FALSE)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">4</span>
+        <div class="body">
+          <h3>predict(type = )</h3>
+          <p><code>"class"</code> devolve a espécie prevista; <code>"raw"</code> devolve as probabilidades. A classe prevista é só a probabilidade maior.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">classe &lt;- predict(rede2, teste2, type = "class")
+prob   &lt;- predict(rede2, teste2, type = "raw")
+
+head(round(prob, 3))</code></pre>
+          </div>
+          <details class="out"><summary>saída</summary><pre><code>   setosa versicolor virginica
+2   0.998      0.002         0
+10  0.998      0.002         0
+11  0.998      0.001         0
+14  0.998      0.001         0
+18  0.998      0.002         0
+33  0.999      0.001         0</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">5</span>
+        <div class="body">
+          <h3>table()</h3>
+          <p>A matriz de confusão. Linhas = previsto, colunas = observado; a diagonal são os acertos.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">matriz &lt;- table(previsto = classe, observado = teste2$Species)
+matriz
+
+acuracia &lt;- sum(diag(matriz)) / sum(matriz)
+round(acuracia, 3)</code></pre>
+          </div>
+          <details class="out" open><summary>saída</summary><pre><code>            observado
+previsto     setosa versicolor virginica
+  setosa         12          0         0
+  versicolor      0         11         0
+  virginica       0          1        12
+
+[1] 0.972</code></pre></details>
+          <p style="margin-top:10px">Um único erro, entre <i>versicolor</i> e <i>virginica</i> — as duas se sobrepõem. Nenhuma <i>setosa</i> errada: ela é linearmente separável.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">6</span>
+        <div class="body">
+          <h3>multinom()</h3>
+          <p>O baseline. É uma rede <b>sem camada oculta</b> — a diferença entre os dois é exatamente o que a camada oculta acrescentou.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">base2       &lt;- multinom(Species ~ ., data = treino2, trace = FALSE)
+classe_base &lt;- predict(base2, teste2)
+
+round(c(rede      = acuracia,
+        logistica = mean(classe_base == teste2$Species),
+        chute     = max(table(treino2$Species)) / nrow(treino2)), 3)</code></pre>
+          </div>
+          <details class="out" open><summary>saída</summary><pre><code>     rede logistica     chute
+    0.972     0.972     0.333</code></pre></details>
+          <p style="margin-top:10px">Empate. O <code>iris</code> é fácil: serve para conferir se o seu código está certo, não para comparar modelos.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">7</span>
+        <div class="body">
+          <h3>plot()</h3>
+          <p>Os acertos em azul, os erros em vermelho.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">plot(teste2$Petal.Length, teste2$Petal.Width,
+     col = ifelse(classe == teste2$Species, "steelblue", "red"),
+     pch = 19, xlab = "Comprimento da petala (padronizado)",
+     ylab = "Largura da petala (padronizado)",
+     main = "Rede neural - iris (vermelho = erro)")</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ====================== TIDYMODELS ====================== -->
+  <div id="panel-tidy" role="tabpanel" aria-labelledby="tab-tidy" hidden>
+
+    <div class="note">
+      <b>Instale antes da aula.</b> <code>install.packages("tidymodels")</code> baixa mais de 80 pacotes. As saídas abaixo mostram o formato do resultado; os valores mudam com a semente e a versão dos pacotes.
+    </div>
+
+    <div class="block">
+      <button class="copy" type="button">copiar</button>
+      <pre><code class="language-r">library(tidymodels)
+tidymodels_prefer()   # resolve conflitos de nomes (filter, select, ...)
+set.seed(2026)</code></pre>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>nnet direto</th><th>tidymodels</th></tr></thead>
+        <tbody>
+          <tr><td><code>sample()</code> nas linhas</td><td><code>initial_split()</code> · <code>training()</code> · <code>testing()</code></td></tr>
+          <tr><td><code>scale(center=, scale=)</code></td><td><code>step_normalize()</code></td></tr>
+          <tr><td><code>nnet(size=, decay=, linout=)</code></td><td><code>mlp(hidden_units=, penalty=)</code> + <code>set_mode()</code></td></tr>
+          <tr><td><code>predict()</code> + desfazer a escala</td><td><code>augment()</code> — a escala volta sozinha</td></tr>
+          <tr><td><code>rmse &lt;- function(...)</code></td><td><code>metric_set(rmse, rsq, mae)</code></td></tr>
+          <tr><td><code>table(previsto, observado)</code></td><td><code>conf_mat()</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <section class="part">
+      <div class="part-head">
+        <h2>mtcars</h2><span class="kind">regressão</span>
+      </div>
+      <p class="part-sub">As sete etapas, sempre nesta ordem. Valem para qualquer modelo e qualquer banco.</p>
+
+      <div class="step">
+        <span class="n">1</span>
+        <div class="body">
+          <h3>initial_split()</h3>
+          <p>Separa treino e teste em um objeto só.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">split  &lt;- initial_split(mtcars, prop = 0.75)
+treino &lt;- training(split)
+teste  &lt;- testing(split)
+
+c(treino = nrow(treino), teste = nrow(teste))</code></pre>
+          </div>
+          <details class="out"><summary>saída</summary><pre><code>treino  teste
+    24      8</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">2</span>
+        <div class="body">
+          <h3>recipe()</h3>
+          <p>Uma lista de instruções de pré-processamento. Aprende no treino e reaplica, idêntica, no teste. <code>bake(prep(...))</code> mostra o que a rede vai receber.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">receita &lt;- recipe(qsec ~ mpg + cyl + disp + hp + wt, data = treino) |&gt;
+  step_normalize(all_numeric_predictors())
+
+bake(prep(receita), new_data = NULL) |&gt; head(3)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">3</span>
+        <div class="body">
+          <h3>mlp()</h3>
+          <p>A rede. <code>hidden_units</code> = <code>size</code>, <code>penalty</code> = <code>decay</code>, <code>epochs</code> = <code>maxit</code>. <code>translate()</code> mostra a chamada real ao <code>nnet</code>.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">modelo &lt;- mlp(hidden_units = 3, penalty = 0.01, epochs = 500) |&gt;
+  set_engine("nnet") |&gt;      # quem faz a conta
+  set_mode("regression")     # linout = TRUE vem junto, automático
+
+translate(modelo)</code></pre>
+          </div>
+          <details class="out"><summary>saída</summary><pre><code>nnet::nnet.formula(formula = missing_arg(), data = missing_arg(),
+                   size = 3, decay = 0.01, maxit = 500,
+                   trace = FALSE, linout = TRUE)</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">4</span>
+        <div class="body">
+          <h3>workflow()</h3>
+          <p>Junta receita e modelo. Assim o pré-processamento viaja junto do modelo — na hora de prever, nada fica para trás.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">fluxo &lt;- workflow() |&gt;
+  add_recipe(receita) |&gt;
+  add_model(modelo)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">5</span>
+        <div class="body">
+          <h3>fit()</h3>
+          <p>Treina. A semente importa: os pesos iniciais são aleatórios.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">set.seed(2026)
+ajuste &lt;- fit(fluxo, data = treino)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">6</span>
+        <div class="body">
+          <h3>augment()</h3>
+          <p>Prevê e cola a coluna <code>.pred</code> nos dados de teste, já na escala original.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">predicoes &lt;- augment(ajuste, new_data = teste)
+
+predicoes |&gt;
+  select(qsec, .pred) |&gt;
+  mutate(erro = round(qsec - .pred, 2))</code></pre>
+          </div>
+          <details class="out"><summary>saída</summary><pre><code># A tibble: 8 x 3
+   qsec  .pred   erro
+  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+  ...</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">7</span>
+        <div class="body">
+          <h3>metric_set()</h3>
+          <p>As métricas prontas, com nome padronizado. RMSE e MAE em segundos; R² adimensional.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">metricas &lt;- metric_set(rmse, rsq, mae)
+
+predicoes |&gt; metricas(truth = qsec, estimate = .pred)</code></pre>
+          </div>
+          <details class="out"><summary>saída</summary><pre><code># A tibble: 3 x 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard         ...
+2 rsq     standard         ...
+3 mae     standard         ...</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">+</span>
+        <div class="body">
+          <h3>baseline</h3>
+          <p>Mesma receita, outro modelo: muda <b>uma linha</b>. É esse o ganho de usar <code>workflow</code>.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">fluxo_lm &lt;- workflow() |&gt;
+  add_recipe(receita) |&gt;
+  add_model(linear_reg() |&gt; set_engine("lm"))    # &lt;- a única diferença
+
+ajuste_lm &lt;- fit(fluxo_lm, data = treino)
+pred_lm   &lt;- augment(ajuste_lm, new_data = teste)
+
+bind_rows(
+  predicoes |&gt; rmse(qsec, .pred) |&gt; mutate(modelo = "rede (mlp)"),
+  pred_lm   |&gt; rmse(qsec, .pred) |&gt; mutate(modelo = "linear (lm)"),
+  teste |&gt; mutate(.pred = mean(treino$qsec)) |&gt;
+    rmse(qsec, .pred) |&gt; mutate(modelo = "media (chute)")
+) |&gt; select(modelo, rmse = .estimate)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">+</span>
+        <div class="body">
+          <h3>ggplot()</h3>
+          <p>Observado × previsto. <code>coord_obs_pred()</code> força a mesma escala nos dois eixos.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">ggplot(predicoes, aes(qsec, .pred)) +
+  geom_abline(linetype = "dashed", colour = "grey50") +
+  geom_point(size = 3, colour = "steelblue") +
+  coord_obs_pred() +
+  labs(x = "qsec observado (s)", y = "qsec previsto (s)") +
+  theme_minimal()</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="part">
+      <div class="part-head">
+        <h2>iris</h2><span class="kind">classificação</span>
+      </div>
+      <p class="part-sub">O fluxo é o mesmo. Mudam três coisas: o alvo é fator, o modo é <code>"classification"</code> e a saída vem com probabilidades.</p>
+
+      <div class="step">
+        <span class="n">1</span>
+        <div class="body">
+          <h3>initial_split(strata = )</h3>
+          <p><code>strata</code> preserva a proporção das classes no treino e no teste.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">set.seed(2026)
+split2  &lt;- initial_split(iris, prop = 0.75, strata = Species)
+treino2 &lt;- training(split2)
+teste2  &lt;- testing(split2)
+
+treino2 |&gt; count(Species)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">2</span>
+        <div class="body">
+          <h3>recipe()</h3>
+          <p>Mesma receita de antes: padronizar os preditores.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">receita2 &lt;- recipe(Species ~ ., data = treino2) |&gt;
+  step_normalize(all_numeric_predictors())</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">3</span>
+        <div class="body">
+          <h3>set_mode("classification")</h3>
+          <p>A única mudança relevante no modelo.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">modelo2 &lt;- mlp(hidden_units = 5, penalty = 0.01, epochs = 500) |&gt;
+  set_engine("nnet") |&gt;
+  set_mode("classification")
+
+fluxo2 &lt;- workflow() |&gt; add_recipe(receita2) |&gt; add_model(modelo2)
+
+set.seed(2026)
+ajuste2 &lt;- fit(fluxo2, data = treino2)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">4</span>
+        <div class="body">
+          <h3>augment()</h3>
+          <p>Devolve <code>.pred_class</code> e uma coluna de probabilidade por classe.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">predicoes2 &lt;- augment(ajuste2, new_data = teste2)
+
+predicoes2 |&gt;
+  select(Species, .pred_class, .pred_setosa, .pred_versicolor, .pred_virginica) |&gt;
+  head(4)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">5</span>
+        <div class="body">
+          <h3>conf_mat()</h3>
+          <p>A matriz de confusão. <code>summary()</code> devolve acurácia, kappa, sensibilidade e especificidade de uma vez.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">matriz &lt;- predicoes2 |&gt; conf_mat(truth = Species, estimate = .pred_class)
+matriz
+
+summary(matriz) |&gt;
+  filter(.metric %in% c("accuracy", "kap", "sens", "spec"))</code></pre>
+          </div>
+          <details class="out"><summary>saída</summary><pre><code>            Truth
+Prediction   setosa versicolor virginica
+  setosa        ...
+  versicolor    ...
+  virginica     ...</code></pre></details>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">6</span>
+        <div class="body">
+          <h3>roc_auc()</h3>
+          <p>Usa as <b>probabilidades</b>, não a classe. Se houver mais de duas classes, passe todas as colunas.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">predicoes2 |&gt; roc_auc(truth = Species,
+                      .pred_setosa, .pred_versicolor, .pred_virginica)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="n">7</span>
+        <div class="body">
+          <h3>comparar modelos</h3>
+          <p>Mesma receita, mesmo split, mesma métrica. É assim que se diz "a rede foi melhor" com honestidade.</p>
+          <div class="block">
+            <button class="copy" type="button">copiar</button>
+            <pre><code class="language-r">candidatos &lt;- list(
+  "rede (mlp)"  = mlp(hidden_units = 5, penalty = 0.01, epochs = 500) |&gt; set_engine("nnet"),
+  "multinomial" = multinom_reg() |&gt; set_engine("nnet")
+  # "floresta"  = rand_forest(trees = 500) |&gt; set_engine("ranger"),
+  # "boosting"  = boost_tree(trees = 500)  |&gt; set_engine("xgboost")
+)
+
+set.seed(2026)
+purrr::map_dfr(candidatos, function(m) {
+  aj &lt;- workflow() |&gt;
+    add_recipe(receita2) |&gt;
+    add_model(set_mode(m, "classification")) |&gt;
+    fit(data = treino2)
+  augment(aj, teste2) |&gt; accuracy(Species, .pred_class)
+}, .id = "modelo")</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ====================== FIM ====================== -->
+  <section class="part">
+    <div class="part-head"><h2>Para mexer</h2></div>
+    <p class="part-sub">Mude um parâmetro por vez e observe o efeito.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>nnet</th><th>tidymodels</th><th>efeito de aumentar</th></tr></thead>
+        <tbody>
+          <tr><td><code>size</code></td><td><code>hidden_units</code></td><td>mais flexibilidade — e mais risco de decorar</td></tr>
+          <tr><td><code>decay</code></td><td><code>penalty</code></td><td>modelo mais suave, menos sobreajuste</td></tr>
+          <tr><td><code>maxit</code></td><td><code>epochs</code></td><td>erro de treino cai; o de teste, nem sempre</td></tr>
+          <tr><td colspan="2"><code>set.seed()</code></td><td>muda tudo — a rede não tem solução única</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="note">
+    <b>O que falta aqui.</b> Validação cruzada para escolher <code>hidden_units</code> e <code>penalty</code> sem olhar o teste, <code>last_fit()</code> para abrir o teste uma única vez, importância de variáveis e curvas de resposta. Está tudo no material completo da disciplina.
+  </div>
+
+  <footer>
+    <p>Material didático · CC BY-NC-SA 4.0 · Código dos exemplos · MIT<br>
+    Departamento de Engenharia de Transportes · EESC-USP · 2026</p>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/r.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  // destaque de sintaxe (silencioso se o cdn não carregar)
+  if (window.hljs) {
+    try {
+      document.querySelectorAll("pre code.language-r").forEach(function (el) {
+        hljs.highlightElement(el);
+      });
+    } catch (e) { /* segue sem destaque */ }
+  }
+
+  // ---- copiar ----
+  function copiar(texto, botao, rotulo) {
+    var ok = function () {
+      botao.textContent = "copiado";
+      botao.dataset.done = "1";
+      setTimeout(function () {
+        botao.textContent = rotulo;
+        delete botao.dataset.done;
+      }, 1600);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(texto).then(ok, function () { fallback(texto, ok); });
+    } else {
+      fallback(texto, ok);
+    }
+  }
+
+  function fallback(texto, ok) {
+    var ta = document.createElement("textarea");
+    ta.value = texto;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); ok(); } catch (e) { /* nada a fazer */ }
+    document.body.removeChild(ta);
+  }
+
+  document.querySelectorAll("button.copy").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var code = b.parentElement.querySelector("code");
+      if (code) copiar(code.innerText, b, "copiar");
+    });
+  });
+
+  // ---- abas ----
+  var abas = {
+    "tab-nnet": "panel-nnet",
+    "tab-tidy": "panel-tidy"
+  };
+
+  function mostrar(idAba) {
+    Object.keys(abas).forEach(function (id) {
+      var ativa = id === idAba;
+      var aba = document.getElementById(id);
+      var painel = document.getElementById(abas[id]);
+      aba.setAttribute("aria-selected", ativa ? "true" : "false");
+      painel.hidden = !ativa;
+    });
+    try { localStorage.setItem("rna-aba", idAba); } catch (e) { /* sem storage */ }
+  }
+
+  Object.keys(abas).forEach(function (id) {
+    document.getElementById(id).addEventListener("click", function () { mostrar(id); });
+  });
+
+  try {
+    var salva = localStorage.getItem("rna-aba");
+    if (salva && abas[salva]) mostrar(salva);
+  } catch (e) { /* sem storage */ }
+
+  // ---- copiar o script inteiro da aba ativa ----
+  document.getElementById("copy-all").addEventListener("click", function () {
+    var painel = document.getElementById(
+      document.getElementById("tab-nnet").getAttribute("aria-selected") === "true"
+        ? "panel-nnet" : "panel-tidy"
+    );
+    var partes = [];
+    painel.querySelectorAll(".block code").forEach(function (c) {
+      partes.push(c.innerText);
+    });
+    copiar(partes.join("\n\n"), this, "Copiar script inteiro");
+  });
+})();
+</script>
+</body>
+</html>
