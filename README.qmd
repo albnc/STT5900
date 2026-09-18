@@ -40,7 +40,7 @@ dados e objetivos os alunos
 
 7. Árvore de decisão e Floresta Aleatória
 
-8. Redes Neurais Artificiais 
+8. [Redes Neurais Artificiais](RNA/README.md)
 
 9. Algoritmos Genéticos
 
