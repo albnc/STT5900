@@ -25,23 +25,20 @@ O conhecimento e aplicação de técnicas estatísticas é essencial para qualqu
 
 ## Conteúdo
 
-1. Introdução – apresentação das técnicas – conhecimento dos bancos de 
-dados e objetivos os alunos
+1.  Introdução – apresentação das técnicas – conhecimento dos bancos de dados e objetivos os alunos
 
-2. Preparação para uma análise multivariada – conhecimento dos seus dados
+2.  Preparação para uma análise multivariada – conhecimento dos seus dados
 
-3. Análise em Componentes Principais
+3.  Análise em Componentes Principais
 
-4. Regressão Linear Múltipla
+4.  Regressão Linear Múltipla
 
-5. Logit Multinomial
+5.  Logit Multinomial
 
-6. Análise de agrupamentos
+6.  Análise de agrupamentos
 
-7. Árvore de decisão e Floresta Aleatória
+7.  Árvore de decisão e Floresta Aleatória
 
-8. [Redes Neurais Artificiais](RNA/README.md)
+8.  [Redes Neurais Artificiais](RNA/README.md)
 
-9. Algoritmos Genéticos
-
-
+9.  Algoritmos Genéticos
