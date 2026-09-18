@@ -42,6 +42,6 @@ pós-graduação de ferramentas para desenvolvimento de projeto.
 
 7.  Árvore de decisão e Floresta Aleatória
 
-8.  Redes Neurais Artificiais
+8. [Redes Neurais Artificiais](RNA/README.md)
 
 9.  Algoritmos Genéticos
