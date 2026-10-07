@@ -38,7 +38,7 @@ library(GA)
 library(tidymodels)
 tidymodels_prefer()     # resolve conflitos de nomes (filter, select, ...)
 
-SEMENTE <- 5207246
+SEMENTE <- 123456
 
 
 # ==============================================================================
