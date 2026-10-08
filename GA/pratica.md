@@ -36,7 +36,7 @@ library(GA)
 library(tidymodels)
 tidymodels_prefer()     # resolve conflitos de nomes (filter, select, ...)
 
-SEMENTE <- 123456
+SEMENTE <- 5207246
 ```
 
 Para a Parte 3, deixe o arquivo `sp270km27.xlsx` na **pasta de trabalho** do R (`getwd()`). Sem ele, o código usa dados sintéticos só para rodar.

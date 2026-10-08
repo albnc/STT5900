@@ -8,10 +8,10 @@ Prof. André Luiz Cunha
 
 | Arquivo | Conteúdo |
 |---|---|
-| [`README.md`](README.md) | Teoria da aula (este arquivo) |
-| [`pratica.md`](pratica.md) | **Aula prática passo a passo**, com os códigos para copiar e colar |
+| [`README.md`](README.md) | Teoria da aula |
+| [`pratica.md`](pratica.md) | **Aula prática**, com os códigos para copiar e colar |
 | [`GA-aula.R`](GA-aula.R) | O mesmo código da prática, em um único script R |
-| [`GA-slides.pptx`](GA-slides.pptx) | Slides da aula |
+
 
 ---
 
@@ -34,7 +34,7 @@ Prof. André Luiz Cunha
 
 ## 1. O problema de escolher
 
-Quais variáveis devem entrar em um modelo? Cada uma **entra ou fica fora**. Com $n$ variáveis candidatas, existem $2^n - 1$ modelos possíveis:
+Quais variáveis devem entrar em um modelo? Com $n$ variáveis candidatas, existem $2^n - 1$ modelos possíveis:
 
 | Variáveis | Modelos possíveis | Testando tudo, a 1 ms por modelo |
 |---:|---:|---|
@@ -178,7 +178,7 @@ Pacote [`GA`](https://luca-scr.github.io/GA/) (Scrucca, 2013):
 
 ```r
 ga(type     = "real-valued",   # "binary" | "real-valued" | "permutation"
-   fitness  = funcao,          # sempre MAXIMIZADA
+   fitness  = funcao,          # sempre MAXIMIZADA, para minimizar: - funcao
    lower    = c(a = 0, b = 0), # limites inferiores (nomes viram rótulos)
    upper    = c(a = 1, b = 9), # limites superiores
    popSize  = 50,              # tamanho da população

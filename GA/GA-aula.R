@@ -38,7 +38,7 @@ library(GA)
 library(tidymodels)
 tidymodels_prefer()     # resolve conflitos de nomes (filter, select, ...)
 
-SEMENTE <- 123456
+SEMENTE <- 20261008
 
 
 # ==============================================================================
@@ -202,18 +202,18 @@ tidy(mq) |>
 # Relação fundamental: q = u · k
 #   q = fluxo (veic/h)   u = velocidade (km/h)   k = densidade (veic/km)
 
-arquivo <- "sp270km27.xlsx"   # deixe o arquivo na mesma pasta deste script
+arquivo <- "sp270km27.csv"   # deixe o arquivo na mesma pasta deste script
 
 if (file.exists(arquivo)) {
-  dados <- readxl::read_excel(arquivo) |>
-    select(Volume_vph, Velocidade_kmph, Densidade_vpkm) |>
+  dados <- read.csv(arquivo) |>
+    select(Volume_vph,Velocidade_kmph,Densidade_vpkm) |>
     drop_na()
 } else {
   # Plano B: dados SINTÉTICOS só para o código rodar sem o arquivo.
-  warning("sp270km27.xlsx não encontrado: usando dados SINTÉTICOS de teste.")
+  warning(paste(arquivo, " não encontrado: usando dados SINTÉTICOS de teste."))
   set.seed(SEMENTE)
   # (Van Aerde com uf = 110, uc = 80, kj = 150, qc = 2200, mais ruído)
-  dados <- tibble(Velocidade_kmph = runif(400, 15, 105)) |>
+  dados <- tibble(Velocidade_kmph = runif(1000, 15, 105)) |>
     mutate(Densidade_vpkm = 1 / (0.005729 + 0.10313 / (110 - Velocidade_kmph) +
                                    0.00033997 * Velocidade_kmph),
            Densidade_vpkm = Densidade_vpkm * exp(rnorm(n(), 0, 0.08)),
