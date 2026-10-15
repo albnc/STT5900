@@ -1,4 +1,4 @@
-# Escrevendo com Markdown e Quarto no RStudio — aula prática 2026
+# Escrevendo com Markdown e Quarto no RStudio
 
 **STT5900 · Departamento de Engenharia de Transportes · EESC/USP**
 Prof. Dr. André Luiz Barbosa Nunes da Cunha
